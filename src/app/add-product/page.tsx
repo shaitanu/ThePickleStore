@@ -1,6 +1,10 @@
 import FormSubmitButton from '@/components/FormSubmitButton';
 import prisma from '@/lib/db/prisma';
+import { get } from 'http';
+import { getServerSession } from 'next-auth';
+import { getSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
+import { authOptions } from '../api/auth/[...nextauth]/route';
 
 export const metadata = {
   title: 'Add Product',
@@ -9,6 +13,10 @@ export const metadata = {
 async function addProduct(formData: FormData) {
   'use server';
 
+  const session = await getServerSession(authOptions);
+  if (!session || session.user?.email !== 'shantanugupta2907@gmail.com') {
+    redirect('/');
+  }
   const name = formData.get('name')?.toString() as string;
   const description = formData.get('description')?.toString() as string;
   const imageUrl = formData.get('url')?.toString() as string;
@@ -21,7 +29,13 @@ async function addProduct(formData: FormData) {
   redirect('/');
 }
 
-const Addproductpage = () => {
+export default async function Addproductpage() {
+  //Note:security may be lite here
+  //Note: env mein admin email id store kro
+  const session = await getServerSession(authOptions);
+  if (!session || session.user?.email !== 'shantanugupta2907@gmail.com') {
+    redirect('/');
+  }
   return (
     <div>
       <h1 className="mb-3 text-lg font-bold">Add Product</h1>
@@ -41,5 +55,4 @@ const Addproductpage = () => {
       </form>
     </div>
   );
-};
-export default Addproductpage;
+}
