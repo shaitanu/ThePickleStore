@@ -27,7 +27,7 @@ export async function generateMetaData({ params: { id } }: ProductPageProps): Pr
   const metaData = {
     metadataBase: new URL(metadataBase),
 
-    title: product.name + '-Flowmazon',
+    title: product.name + ' | The Pickle Store',
     description: product.description,
     openGraph: {
       images: [{ url: product.imageUrl }],
